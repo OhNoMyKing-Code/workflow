@@ -8,21 +8,32 @@ on:
     paths:
       - "user_interface.py"
 
-jobs:        
-  build:        
-    runs-on: ubuntu-latest        
-    timeout-minutes: 355        
-    env:        
-      LICHESS_BOT_TOKEN: ${{ secrets.TOKEN }}        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      LICHESS_BOT_TOKEN: ${{ secrets.TOKEN }}
       EXO: ${{ secrets.PAT_TOKEN }}
     steps:
-      - uses: git clone https://x-access-token:${{ secrets.EXO }}@github.com/KHANHSF/KhanhBot.git
-      - name: Download
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Clone KhanhBot
+        run: |
+          git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/KHANHSF/KhanhBot.git
+
+      - name: Install dependencies
         uses: py-actions/py-dependency-install@v4.0.0
+
       - name: Injection For my Repo
         run: sed -i "s/TokenTimeIsBackBuddyss/${{ secrets.LICHESS_BOT_TOKEN }}/g" config.yml
+
       - name: Stockfish
-        run: chmod +x ./engines/stockfish ./engines/fairy-stockfish_x86-64-bmi2 
+        run: chmod +x ./engines/stockfish ./engines/fairy-stockfish_x86-64-bmi2
+
       - name: Running bot
         run: |
           python -u user_interface.py "matchmaking" "join dark-on-teams" "tournament Kqul9pAe" "join real-humans" "tournament lrFVSZ51 real-humans" &
@@ -31,14 +42,9 @@ jobs:
           ( sleep 20700 && echo "Time up. Killing bot..." && kill -SIGTERM $PID ) &
           wait $PID
           echo "Bot ended cleanly."
-        
-        
+
       - name: 🔁 Self-Restart
         if: always()
-        run: gh workflow run bot.yml
+        run: gh workflow run runbot.yml
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-
-
-
-
