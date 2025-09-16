@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest        
     timeout-minutes: 355        
     env:        
-      LICHESS_BOT_TOKEN: ${{ secrets.LICHESS_KEY }}        
-      EXO: ${{ secrets.EXO }}
+      LICHESS_BOT_TOKEN: ${{ secrets.TOKEN }}        
+      EXO: ${{ secrets.PAT_TOKEN }}
     steps:
-      - uses: git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/KHANHSF/KhanhBot.git
+      - uses: git clone https://x-access-token:${{ secrets.EXO }}@github.com/KHANHSF/KhanhBot.git
       - name: Download
         uses: py-actions/py-dependency-install@v4.0.0
       - name: Injection For my Repo
-        run: sed -i "s/TokenTimeIsBackBuddyss/${{ secrets.TOKEN }}/g" config.yml
+        run: sed -i "s/TokenTimeIsBackBuddyss/${{ secrets.LICHESS_BOT_TOKEN }}/g" config.yml
       - name: Stockfish
         run: chmod +x ./engines/stockfish ./engines/fairy-stockfish_x86-64-bmi2 
       - name: Running bot
