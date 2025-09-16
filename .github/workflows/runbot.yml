@@ -8,12 +8,15 @@ on:
     paths:
       - "user_interface.py"
 
-jobs:
-  lichess-bot:
-    name: Run ghost_hunter2998
-    runs-on: ubuntu-latest
+jobs:        
+  build:        
+    runs-on: ubuntu-latest        
+    timeout-minutes: 355        
+    env:        
+      LICHESS_BOT_TOKEN: ${{ secrets.LICHESS_KEY }}        
+      EXO: ${{ secrets.EXO }}
     steps:
-      - uses: git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/zonalraid45/Myshirt.git
+      - uses: git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/KHANHSF/KhanhBot.git
       - name: Download
         uses: py-actions/py-dependency-install@v4.0.0
       - name: Injection For my Repo
